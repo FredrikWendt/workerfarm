@@ -2,7 +2,7 @@ package se.wendt.p4l;
 
 public interface ExecutionContext {
 
-	Client getExecutingClient();
+	Worker getExecutingWorker();
 	
 	void publishJobResult(JobResult<?> jobResult);
 	

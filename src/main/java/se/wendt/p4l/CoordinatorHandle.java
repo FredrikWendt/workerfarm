@@ -1,9 +1,9 @@
 package se.wendt.p4l;
 
 
-public interface ServerHandle {
+public interface CoordinatorHandle {
 
-	void requestJob(ClientId clientId);
+	void requestJob(WorkerId workerId);
 	
 	void jobAccepted(JobId jobId);
 	

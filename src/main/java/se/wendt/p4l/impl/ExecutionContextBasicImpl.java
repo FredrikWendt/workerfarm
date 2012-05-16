@@ -3,27 +3,27 @@ package se.wendt.p4l.impl;
 import java.util.Set;
 import java.util.concurrent.CopyOnWriteArraySet;
 
-import se.wendt.p4l.Client;
+import se.wendt.p4l.Worker;
 import se.wendt.p4l.ExecutionContext;
 import se.wendt.p4l.JobResult;
 import se.wendt.p4l.JobResultPublishedListener;
 
 public class ExecutionContextBasicImpl implements ExecutionContext {
 
-	private final Client client;
+	private final Worker client;
 	private Set<JobResultPublishedListener> listeners = new CopyOnWriteArraySet<JobResultPublishedListener>();
 
-	public ExecutionContextBasicImpl(Client client) {
+	public ExecutionContextBasicImpl(Worker client) {
 		this.client = client;
 	}
 
-	public ExecutionContextBasicImpl(Client client, JobResultPublishedListener jobResultPublishedListener) {
+	public ExecutionContextBasicImpl(Worker client, JobResultPublishedListener jobResultPublishedListener) {
 		this(client);
 		listeners.add(jobResultPublishedListener);
 	}
 
 	@Override
-	public Client getExecutingClient() {
+	public Worker getExecutingWorker() {
 		return client;
 	}
 

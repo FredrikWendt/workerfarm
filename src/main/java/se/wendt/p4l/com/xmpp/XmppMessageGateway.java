@@ -1,5 +1,7 @@
 package se.wendt.p4l.com.xmpp;
 
+import java.util.Random;
+
 import org.jivesoftware.smack.Chat;
 import org.jivesoftware.smack.ChatManager;
 import org.jivesoftware.smack.ChatManagerListener;
@@ -11,18 +13,18 @@ import org.jivesoftware.smack.XMPPConnection;
 import org.jivesoftware.smack.XMPPException;
 import org.jivesoftware.smack.packet.Message;
 
-import se.wendt.p4l.ClientId;
-import se.wendt.p4l.com.MessageGatewayForClient;
-import se.wendt.p4l.com.MessageGatewayForServer;
+import se.wendt.p4l.WorkerId;
+import se.wendt.p4l.com.MessageGatewayForCoordinator;
+import se.wendt.p4l.com.MessageGatewayForWorker;
 import se.wendt.p4l.com.ObjectHandler;
-import se.wendt.p4l.impl.ClientIdImpl;
+import se.wendt.p4l.impl.WorkerIdImpl;
 
-public class XmppMessageGateway implements ConnectionListener, ChatManagerListener, MessageListener, MessageGatewayForServer, MessageGatewayForClient {
+public class XmppMessageGateway implements ConnectionListener, ChatManagerListener, MessageListener, MessageGatewayForCoordinator, MessageGatewayForWorker {
 
 	private ChatManager chatManager;
 	private Connection connection;
 	private final String serverJabberId;
-	private final ClientIdImpl serverId;
+	private final WorkerIdImpl serverId;
 	private ObjectHandler objectHandler;
 
 	public static XmppMessageGateway server(XmppConfiguration config) {
@@ -35,7 +37,7 @@ public class XmppMessageGateway implements ConnectionListener, ChatManagerListen
 	
 	private XmppMessageGateway(XmppConfiguration config, String user, String pass) {
 		this.serverJabberId = config.getServerJabberId();
-		this.serverId = new ClientIdImpl(serverJabberId);
+		this.serverId = new WorkerIdImpl(serverJabberId);
 		try {
 			this.setupConnection(config.getServerHostname(), user, pass);
 		} catch (XMPPException e) {
@@ -45,7 +47,7 @@ public class XmppMessageGateway implements ConnectionListener, ChatManagerListen
 
 	private void setupConnection(String server, String user, String pass) throws XMPPException {
 		ConnectionConfiguration connectionConfiguration = new ConnectionConfiguration(server);
-		connectionConfiguration.setDebuggerEnabled(true);
+		connectionConfiguration.setDebuggerEnabled(System.getenv("DEBUG_SMACK") != null);
 		connectionConfiguration.setReconnectionAllowed(true);
 		connectionConfiguration.setRosterLoadedAtLogin(false);
 		connectionConfiguration.setSendPresence(false);
@@ -126,7 +128,7 @@ public class XmppMessageGateway implements ConnectionListener, ChatManagerListen
 	}
 
 	@Override
-	public void sendMessage(ClientId clientId, Object message) {
+	public void sendMessage(WorkerId clientId, Object message) {
 		Message msg = new Message(clientId.toString());
 		msg.setProperty("object", message);
 		connection.sendPacket(msg);
@@ -135,6 +137,11 @@ public class XmppMessageGateway implements ConnectionListener, ChatManagerListen
 	@Override
 	public void sendMessage(Object message) {
 		sendMessage(serverId, message);
+	}
+
+	public static WorkerId createWorkerId(XmppConfiguration config) {
+		String user = "worker-" + Integer.toHexString(new Random().nextInt());
+		return new WorkerIdImpl(user + "@" + config.getServerHostname());
 	}
 
 }

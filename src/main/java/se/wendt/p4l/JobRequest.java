@@ -1,8 +1,10 @@
 package se.wendt.p4l;
 
-public interface JobRequest {
+import java.io.Serializable;
 
-	ClientId getClientId();
+public interface JobRequest extends Serializable {
+
+	WorkerId getWorkerId();
 	
 	void offerJob(Job job);
 	

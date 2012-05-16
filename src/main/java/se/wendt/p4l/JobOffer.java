@@ -1,6 +1,8 @@
 package se.wendt.p4l;
 
-public interface JobOffer {
+import java.io.Serializable;
+
+public interface JobOffer extends Serializable {
 
 	Job getJob();
 	

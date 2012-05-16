@@ -3,12 +3,12 @@ package se.wendt.p4l;
 /**
  * This is what you need to implement to serve jobs.
  */
-public interface Server {
+public interface Coordinator<R> {
 
 	void jobRequested(JobRequest request);
 
 	void jobAccepted(JobId job);
 
-	void jobFinished(JobResult<?> result);
+	void jobFinished(JobResult<R> result);
 
 }

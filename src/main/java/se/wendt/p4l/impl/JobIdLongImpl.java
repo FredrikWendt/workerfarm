@@ -2,13 +2,13 @@ package se.wendt.p4l.impl;
 
 import se.wendt.p4l.JobId;
 
-public class JobIdImpl implements JobId {
+public class JobIdLongImpl implements JobId {
 
 	private static final long serialVersionUID = 1L;
 	
 	private String id;
 
-	public JobIdImpl(long id) {
+	public JobIdLongImpl(long id) {
 		this.id = Long.toHexString(id);
 	}
 	

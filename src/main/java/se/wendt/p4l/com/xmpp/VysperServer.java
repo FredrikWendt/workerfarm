@@ -20,7 +20,7 @@ public class VysperServer {
 		StorageProviderRegistry registry = new OpenStorageProviderRegistry();
 		UserAuthorization reg = new UserAuthorization() {
 			public boolean verifyCredentials(String arg0, String arg1, Object arg2) {
-				System.out.println("All string credentials are valid");
+				System.out.printf("All string credentials are valid: %s %s %s\n", arg0, arg1, arg2);
 				return true;
 			}
 			
