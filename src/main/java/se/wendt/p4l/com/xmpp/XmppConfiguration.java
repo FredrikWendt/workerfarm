@@ -2,12 +2,19 @@ package se.wendt.p4l.com.xmpp;
 
 public class XmppConfiguration {
 
-	public String getServerHostname() {
+	private final String hostName;
+	
+	public XmppConfiguration() {
 		String env = System.getenv("XMPP_HOST_NAME");
 		if (env == null) {
 			env = "localhost";
 		}
-		return env;
+		hostName = env;
+		System.out.println("Using XMPP_HOST_NAME=" + hostName);
+	}
+
+	public String getServerHostname() {
+		return hostName;
 	}
 
 	public String getCoordinatorUsername() {
